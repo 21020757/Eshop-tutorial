@@ -20,7 +20,7 @@ import { addTocart } from "../../../redux/actions/cart";
 import { toast } from "react-toastify";
 import Ratings from "../../Products/Ratings";
 
-const ProductCard = ({ data,isEvent }) => {
+const ProductCard = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
@@ -80,7 +80,7 @@ const ProductCard = ({ data,isEvent }) => {
           </h4>
 
           <div className="flex">
-          <Ratings rating={data?.ratings} />
+            <Ratings rating={data?.ratings} />
           </div>
 
           <div className="py-2 flex items-center justify-between">
@@ -92,7 +92,7 @@ const ProductCard = ({ data,isEvent }) => {
                 $
               </h5>
               <h4 className={`${styles.price}`}>
-                {data.originalPrice ? data.originalPrice + " $" : null}
+                {data.originalPrice ? data.originalPrice + " VNĐ" : null}
               </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#68d284]">
