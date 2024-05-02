@@ -93,15 +93,24 @@ const ProductCard = ({ data, isEvent }) => {
                 {(data.originalPrice === 0
                   ? data.originalPrice
                   : data.discountPrice
-                ).toLocaleString("vi-VN")}
-                VNĐ
+                ).toLocaleString("vi-VN") + " VNĐ"}
+                {data.originalPrice && data.discountPrice && (
+                  <span style={{ color: "red" }} className=" ml-2">
+                    -
+                    {(
+                      (1 - data.discountPrice / data.originalPrice) *
+                      100
+                    ).toFixed(0)}
+                    %
+                  </span>
+                )}
               </h5>
-              <h4 className={`${styles.price}`}>
+              <h5 className={`${styles.price} mb-2`}>
                 {(data.originalPrice
                   ? data.originalPrice
                   : null
                 ).toLocaleString("vi-VN") + " VNĐ"}
-              </h4>
+              </h5>
             </div>
             <div className="flex">
               <span className="font-[400] text-sm mr-4">
@@ -113,20 +122,22 @@ const ProductCard = ({ data, isEvent }) => {
             </div>
           </div>
         </Link>
-        <div className="flex justify-center items-center mt-3">
+        <div className="flex justify-between items-center mt-3">
           <button
-            className="flex items-center justify-center bg-blue-500 text-white py-1 px-2 rounded-md mr-2"
+            className="flex items-center justify-center bg-blue-500 text-white py-1 px-2 rounded-md"
             onClick={addToCartHandler}
             title="Thêm vào giỏ hàng"
           >
-            Mua hàng
+            <AiOutlineShoppingCart className="mr-0.5"></AiOutlineShoppingCart>
+            Mua ngay
           </button>
           <button
-            className="flex items-center justify-center bg-blue-500 text-white py-1 px-2 rounded-md mr-2"
+            className="flex items-center justify-center bg-blue-500 text-white py-1 px-2 rounded-md"
             onClick={() => setOpen(!open)}
             title="Thêm vào giỏ hàng"
           >
-            Xem chi tiết
+            <AiOutlineEye className="mr-0.5"></AiOutlineEye>
+             Xem ngay
           </button>
         </div>
       </div>

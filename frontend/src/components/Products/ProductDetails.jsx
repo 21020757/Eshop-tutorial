@@ -90,7 +90,7 @@ const ProductDetails = ({ data }) => {
 
   const avg = totalRatings / totalReviewsLength || 0;
 
-  const averageRating = avg.toFixed(2);
+  const averageRating = avg.toFixed(1);
 
 
   const handleMessageSubmit = async () => {
@@ -127,28 +127,6 @@ const ProductDetails = ({ data }) => {
                   alt=""
                   className="w-[80%]"
                 />
-                <div className="w-full flex">
-                  {data &&
-                    data.images.map((i, index) => (
-                      <div
-                        className={`${
-                          select === 0 ? "border" : "null"
-                        } cursor-pointer`}
-                      >
-                        <img
-                          src={`${i?.url}`}
-                          alt=""
-                          className="h-[200px] overflow-hidden mr-3 mt-3"
-                          onClick={() => setSelect(index)}
-                        />
-                      </div>
-                    ))}
-                  <div
-                    className={`${
-                      select === 1 ? "border" : "null"
-                    } cursor-pointer`}
-                  ></div>
-                </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
@@ -206,11 +184,11 @@ const ProductDetails = ({ data }) => {
                   className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
                   onClick={() => addToCartHandler(data._id)}
                 >
-                  <span className="text-white flex items-center">
+                  <span className="text-white flex items-center ">
                     Add to cart <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>
-                <div className="flex items-center pt-8">
+                {/* <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
                       src={`${data?.shop?.avatar?.url}`}
@@ -235,6 +213,88 @@ const ProductDetails = ({ data }) => {
                     <span className="text-white flex items-center">
                       Liên hệ <AiOutlineMessage className="ml-1" />
                     </span>
+                  </div>
+                </div> */}
+              </div>
+            </div>
+            <p className=" text-xl font-bold mt-12">Thông tin nhà cung cấp</p>
+            <div class=" relative max-w-6xl 1000px:w-[75%] ml-0">
+              <div class="bg-gradient-to-r to-blue-50 border from-white shadow-lg rounded-3xl p-4 mr-4 mt-4 mb-4 ml-0">
+                <div class="flex-none sm:flex">
+                  <div class=" relative h-40 w-40 sm:mb-0 mb-3 mr-4">
+                    <img
+                      src={`${data?.shop?.avatar?.url}`}
+                      alt="aji"
+                      class=" w-40 h-40 object-cover rounded-2xl"
+                    />
+                  </div>
+
+                  <div class="flex-auto sm:ml-5 justify-evenly">
+                    <div class="flex items-center justify-between sm:mt-2">
+                      <div class="flex items-center">
+                        <div class="flex flex-col">
+                          <div class="w-full flex-none text-lg text-black font-bold leading-none mb-2">
+                            {data.shop.name}
+                          </div>
+                          <div class="flex-auto text-gray-500 my-3">
+                            <span class="mr-3 ">
+                              Số sản phẩm: {products && products.length}
+                            </span>
+                            <span class="mr-3 border-r border-gray-500  max-h-0"></span>
+                            <span>100% đơn hàng thành công</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-row items-center">
+                      <div class="flex">
+                        <Ratings rating={averageRating} />
+                      </div>
+                    </div>
+                    <div class="flex pt-2  text-sm text-gray-400">
+                      <div class="flex-1 inline-flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5 mr-2"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+                        </svg>
+                        <p className="mb-0">{totalReviewsLength} lượt đánh giá</p>
+                      </div>
+                      <div class="flex-1 inline-flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5 mr-2"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                        <p className="mb-0">
+                          Tham gia vào: {data.shop?.createdAt?.slice(0, 10)}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          navigate(`/shop/preview/${data?.shop._id}`);
+                        }}
+                        className="flex-no-shrink bg-gray-800 hover:bg-black px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 text-white rounded-full transition ease-in duration-300"
+                      >
+                        Xem gian hàng
+                      </button>
+                      <button
+                        onClick={handleMessageSubmit}
+                        className="flex-no-shrink bg-gray-800 hover:bg-black px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 text-white rounded-full transition ease-in duration-300"
+                      >
+                        Liên hệ
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
