@@ -29,6 +29,9 @@ const ProductDetails = ({ data }) => {
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const formatPrice = (price) => {
+    return price.toLocaleString("vi-VN") + " VNĐ";
+  };
   useEffect(() => {
     dispatch(getAllProductsShop(data && data?.shop._id));
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
@@ -128,8 +131,9 @@ const ProductDetails = ({ data }) => {
                   {data &&
                     data.images.map((i, index) => (
                       <div
-                        className={`${select === 0 ? "border" : "null"
-                          } cursor-pointer`}
+                        className={`${
+                          select === 0 ? "border" : "null"
+                        } cursor-pointer`}
                       >
                         <img
                           src={`${i?.url}`}
@@ -140,40 +144,43 @@ const ProductDetails = ({ data }) => {
                       </div>
                     ))}
                   <div
-                    className={`${select === 1 ? "border" : "null"
-                      } cursor-pointer`}
+                    className={`${
+                      select === 1 ? "border" : "null"
+                    } cursor-pointer`}
                   ></div>
                 </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                 <p>{data.description}</p>
-                <div className="flex pt-3">
-                  <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discountPrice}VNĐ
+                <div className="pt-3">
+                  <h4 className={`${styles.productDiscountPrice} text-lg`}>
+                    {formatPrice(data.discountPrice)}
                   </h4>
-                  <h3 className={`${styles.price}`}>
-                    {data.originalPrice ? data.originalPrice + "VNĐ" : null}
+                  <h3 className={`${styles.price} mt-4`}>
+                    {formatPrice(
+                      data.originalPrice ? data.originalPrice : null
+                    )}
                   </h3>
                 </div>
 
                 <div className="flex items-center mt-12 justify-between pr-3">
                   <div>
-                    <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                    <div
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out inline-block cursor-pointer"
                       onClick={decrementCount}
                     >
                       -
-                    </button>
-                    <span className="bg-gray-200 text-gray-800 font-medium px-4 py-[11px]">
+                    </div>
+                    <div className="bg-gray-200 text-gray-800 font-medium px-4 py-2 inline-block">
                       {count}
-                    </span>
-                    <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                    </div>
+                    <div
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-r px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out inline-block cursor-pointer"
                       onClick={incrementCount}
                     >
                       +
-                    </button>
+                    </div>
                   </div>
                   <div>
                     {click ? (
@@ -226,7 +233,7 @@ const ProductDetails = ({ data }) => {
                     onClick={handleMessageSubmit}
                   >
                     <span className="text-white flex items-center">
-                      Send Message <AiOutlineMessage className="ml-1" />
+                      Liên hệ <AiOutlineMessage className="ml-1" />
                     </span>
                   </div>
                 </div>
