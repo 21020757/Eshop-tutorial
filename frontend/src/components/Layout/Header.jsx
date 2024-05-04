@@ -147,7 +147,7 @@ const Header = ({ activeHeading }) => {
                 {searchData &&
                   searchData.map((i, index) => {
                     return (
-                      <Link to={``}>
+                      <Link to={`/shop/preview/${i?._id}`}>
                         <div className="w-full flex items-start-py-3">
                           <img
                             src={`${i?.avatar?.url}`}
