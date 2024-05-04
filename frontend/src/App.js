@@ -60,6 +60,7 @@ import axios from "axios";
 import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { getAllSellers } from "./redux/actions/sellers.js";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -73,6 +74,7 @@ const App = () => {
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
+    Store.dispatch(getAllSellers())
     getStripeApikey();
   }, []);
 

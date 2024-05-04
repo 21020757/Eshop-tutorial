@@ -21,27 +21,53 @@ import Badge from "@mui/material/Badge";
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { isSeller } = useSelector((state) => state.seller);
+  const [searchType, setSearchType] = useState("product"); 
+  const { sellers } = useSelector((state) => state.seller);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { allProducts } = useSelector((state) => state.products);
+  const { searchs } = useState(allProducts);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
+  const [openResults, setOpenResults] = useState(false);
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
+  const handleTypeChange = (type) => {
+     setOpenResults(false)
+     setSearchType(type);
+     setSearchTerm("");
+   };
 
-    const filteredProducts =
+  const handleSearchChange = (e, type) => {
+    console.log(sellers)
+    const term = e.target.value;
+    if (term != "") {
+     setOpenResults(true);
+    } else {
+      setOpenResults(false)
+    }
+    
+    setSearchTerm(term);
+    if (type === "product")  {
+      var result =
       allProducts &&
       allProducts.filter((product) =>
         product.name.toLowerCase().includes(term.toLowerCase())
       );
-    setSearchData(filteredProducts);
+    } else {
+      var result =
+        sellers &&
+        sellers.filter((product) =>
+          product.name.toLowerCase().includes(term.toLowerCase())
+        );
+    }
+    
+    setSearchData(result);
+    console.log(result)
   };
 
   window.addEventListener("scroll", () => {
@@ -65,19 +91,36 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
           {/* search box */}
-          <div className="w-[50%] relative">
+          <div className="w-[50%] relative border-[#3957db] border-[2px] rounded-full">
+            <select
+              className="h-[40px] px-2 w-[20%] rounded-l-full"
+              value={searchType}
+              onChange={(e) => handleTypeChange(e.target.value)}
+            >
+              <option value="product">Sản phẩm</option>
+              <option value="supplier">Nhà cung cấp</option>
+            </select>
             <input
               type="text"
-              placeholder="Tìm kiếm sản phẩm..."
+              placeholder={
+                searchType === "product"
+                  ? "Tìm kiếm sản phẩm..."
+                  : "Tìm kiếm nhà cung cấp..."
+              }
               value={searchTerm}
-              onChange={handleSearchChange}
-              className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
+              onChange={(e) => {
+                handleSearchChange(e, searchType);
+              }}
+              className="h-[40px] w-[80%] px-2 rounded-r-full border-l-[2px] border-[#3957db]"
             />
             <AiOutlineSearch
               size={30}
               className="absolute right-2 top-1.5 cursor-pointer"
             />
-            {searchData && searchData.length !== 0 ? (
+            {openResults &&
+            searchType === "product" &&
+            searchData &&
+            searchData.length !== 0 ? (
               <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                 {searchData &&
                   searchData.map((i, index) => {
@@ -86,6 +129,28 @@ const Header = ({ activeHeading }) => {
                         <div className="w-full flex items-start-py-3">
                           <img
                             src={`${i.images[0]?.url}`}
+                            alt=""
+                            className="w-[40px] h-[40px] mr-[10px]"
+                          />
+                          <h1>{i.name}</h1>
+                        </div>
+                      </Link>
+                    );
+                  })}
+              </div>
+            ) : null}
+            {openResults &&
+            searchType === "supplier" &&
+            searchData &&
+            searchData.length !== 0 ? (
+              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
+                {searchData &&
+                  searchData.map((i, index) => {
+                    return (
+                      <Link to={``}>
+                        <div className="w-full flex items-start-py-3">
+                          <img
+                            src={`${i?.avatar?.url}`}
                             alt=""
                             className="w-[40px] h-[40px] mr-[10px]"
                           />
