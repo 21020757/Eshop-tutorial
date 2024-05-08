@@ -6,6 +6,7 @@ import {
   AiOutlineHeart,
   AiOutlineSearch,
   AiOutlineShoppingCart,
+  AiOutlineQuestionCircle
 } from "react-icons/ai";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
@@ -17,6 +18,7 @@ import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
 import Badge from "@mui/material/Badge";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -35,6 +37,7 @@ const Header = ({ activeHeading }) => {
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleTypeChange = (type) => {
      setOpenResults(false)
@@ -91,9 +94,9 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
           {/* search box */}
-          <div className="w-[50%] relative border-[#3957db] border-[2px] rounded-full">
+          <div className="w-[50%] relative border-[#000] border-[2px] rounded-full p-1 bg-white flex">
             <select
-              className="h-[40px] px-2 w-[20%] rounded-l-full"
+              className="h-[40px] w-[20%] rounded-l-full"
               value={searchType}
               onChange={(e) => handleTypeChange(e.target.value)}
             >
@@ -111,11 +114,11 @@ const Header = ({ activeHeading }) => {
               onChange={(e) => {
                 handleSearchChange(e, searchType);
               }}
-              className="h-[40px] w-[80%] px-2 rounded-r-full border-l-[2px] border-[#3957db]"
+              className="h-[40px] w-[80%] px-2 rounded-r-full border-l-[2px] border-[#c8c4c4]"
             />
             <AiOutlineSearch
               size={30}
-              className="absolute right-2 top-1.5 cursor-pointer"
+              className="right-2 cursor-pointer h-[40px]"
             />
             {openResults &&
             searchType === "product" &&
@@ -181,34 +184,27 @@ const Header = ({ activeHeading }) => {
         <div
           className={`${styles.section} relative ${styles.noramlFlex} justify-between`}
         >
-          {/* categories */}
-          <div onClick={() => setDropDown(!dropDown)}>
-            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
-              <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
-              <button
-                className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
-              >
-                All Categories
-              </button>
-              <IoIosArrowDown
-                size={20}
-                className="absolute right-2 top-4 cursor-pointer"
-                onClick={() => setDropDown(!dropDown)}
-              />
-              {dropDown ? (
-                <DropDown
-                  categoriesData={categoriesData}
-                  setDropDown={setDropDown}
-                />
-              ) : null}
-            </div>
-          </div>
           {/* navitems */}
           <div className={`${styles.noramlFlex}`}>
             <Navbar active={activeHeading} />
           </div>
 
           <div className="flex">
+            <div className={`${styles.noramlFlex}`}>
+              <Badge
+                className="relative cursor-pointer mr-[15px]"
+                onClick={() => {
+                  navigate("/faq");
+                }}
+                color="error"
+              >
+                <AiOutlineQuestionCircle
+                  size={30}
+                  color="rgb(255 255 255 / 83%)"
+                />
+              </Badge>
+            </div>
+
             <div className={`${styles.noramlFlex}`}>
               <Badge
                 className="relative cursor-pointer mr-[15px]"
