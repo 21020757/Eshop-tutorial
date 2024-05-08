@@ -5,7 +5,7 @@ export const navItems = [
       url: "/",
     },
     {
-      title: "Nhà phân phối",
+      title: "Nhà cung cấp",
       url: "/best-selling",
     },
     {
