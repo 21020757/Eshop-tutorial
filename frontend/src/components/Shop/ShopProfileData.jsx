@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getAllProductsShop } from "../../redux/actions/product";
@@ -21,6 +23,8 @@ import { toast } from "react-toastify";
 import { addTocart } from "../../redux/actions/cart";
 
 const ShopProfileData = ({ isOwner }) => {
+  const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
@@ -39,6 +43,20 @@ const ShopProfileData = ({ isOwner }) => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
   }, [dispatch]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get(`${server}/shop/get-shop-info/${id}`)
+      .then((res) => {
+        setData(res.data.shop);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  }, []);
 
   const [currentProducts, setCurrentProducts] = useState(products);
 
@@ -224,7 +242,99 @@ const handleTabClick = (tab) => {
         </div>
       </nav>
       {selectedTab === "profile" ? (
-        <section className="container mx-auto"></section>
+        <section className="container mx-auto">
+          <div class="bg-white shadow-xl pb-8">
+            <div class="w-full h-[250px]">
+              <img
+                src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg"
+                className="w-full h-full"
+              />
+            </div>
+            <div class="flex flex-col items-center -mt-20">
+              <img
+                src={`${data.avatar?.url}`}
+                className="w-40 h-40 border-4 border-white rounded-full"
+              ></img>
+              <div class="flex items-center space-x-2 mt-2">
+                <p class="text-2xl">{data.name}</p>
+                <span class="bg-blue-500 rounded-full p-1" title="Verified">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="text-gray-100 h-2.5 w-2.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="4"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                </span>
+              </div>
+              <p class="text-gray-700">{data.address}</p>
+              <p class="text-sm text-gray-500">
+                Tham gia vào {data?.createdAt?.slice(0, 10)}
+              </p>
+            </div>
+            <div class="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
+              <button class="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span>Message</span>
+              </button>
+            </div>
+          </div>
+          <div class="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
+            <div class="w-full flex flex-col 2xl:w-1/3">
+              <div class="flex-1 bg-white rounded-lg shadow-xl p-8">
+                <h4 class="text-xl text-gray-900 font-bold">
+                  Thông tin nhà cung cấp
+                </h4>
+                <ul class="mt-2 text-gray-700">
+                  <li class="flex border-y py-2">
+                    <span class="font-bold w-24">Tên:</span>
+                    <span class="text-gray-700">{data.name}</span>
+                  </li>
+                  <li class="flex border-b py-2">
+                    <span class="font-bold w-24">Nhân viên:</span>
+                    <span class="text-gray-700">300</span>
+                  </li>
+                  <li class="flex border-b py-2">
+                    <span class="font-bold w-24">Tham gia:</span>
+                    <span class="text-gray-700">
+                      {data?.createdAt?.slice(0, 10)}
+                    </span>
+                  </li>
+                  <li class="flex border-b py-2">
+                    <span class="font-bold w-24">Điện thoại:</span>
+                    <span class="text-gray-700">{data.phoneNumber}</span>
+                  </li>
+                  <li class="flex border-b py-2">
+                    <span class="font-bold w-24">Email:</span>
+                    <span class="text-gray-700">{data.email}</span>
+                  </li>
+                  <li class="flex border-b py-2">
+                    <span class="font-bold w-24">Location:</span>
+                    <span class="text-gray-700">{data.address}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
       ) : (
         <section className="container mx-auto">
           <div class="container px-6 py-8 mx-auto">
@@ -334,7 +444,9 @@ const handleTabClick = (tab) => {
 
               <div class="mt-6 lg:mt-0 lg:px-2 lg:w-4/5 ">
                 <div class="flex items-center justify-between text-sm tracking-widest uppercase ">
-                  <p class="text-gray-500 dark:text-gray-300">{currentProducts.length} Sản phẩm</p>
+                  <p class="text-gray-500 dark:text-gray-300">
+                    {currentProducts.length} Sản phẩm
+                  </p>
                   <div class="flex items-center">
                     <p class="text-gray-500 dark:text-gray-300">Sort</p>
                     <select class="font-medium text-gray-700 bg-transparent dark:text-gray-500 focus:outline-none">
