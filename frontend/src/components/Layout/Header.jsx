@@ -124,16 +124,16 @@ const Header = ({ activeHeading }) => {
             searchType === "product" &&
             searchData &&
             searchData.length !== 0 ? (
-              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
+              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-2 top-[60px] w-full rounded-xl shadow-xl">
                 {searchData &&
                   searchData.map((i, index) => {
                     return (
                       <Link to={`/product/${i._id}`}>
-                        <div className="w-full flex items-start-py-3">
+                        <div className="w-full flex p-3 items-center hover:bg-gray-300 rounded-lg cursor-pointer">
                           <img
                             src={`${i.images[0]?.url}`}
                             alt=""
-                            className="w-[40px] h-[40px] mr-[10px]"
+                            className="h-9 w-9 rounded-sm flex mr-[6px]"
                           />
                           <h1>{i.name}</h1>
                         </div>
