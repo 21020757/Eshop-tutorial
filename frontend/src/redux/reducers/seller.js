@@ -26,10 +26,12 @@ export const sellerReducer = createReducer(initialState, {
   getAllSellersSuccess: (state, action) => {
     state.isLoading = false;
     state.sellers = action.payload;
+    console.log(action.payload);
   },
   getAllSellerFailed: (state, action) => {
     state.isLoading = false;
-    state.error = action.payload;
+   state.sellers = action.payload;
+    console.log(action.payload);
   },
   clearErrors: (state) => {
     state.error = null;

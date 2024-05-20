@@ -27,7 +27,6 @@ const ShopProfileData = ({ isOwner }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.products);
-  const { events } = useSelector((state) => state.events);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const ShopProfileData = ({ isOwner }) => {
   const [openWishlist, setOpenWishlist] = useState(false);
   const { cart } = useSelector((state) => state.cart);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  
+  const [searchResult, setSearchResult] = useState([])
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
@@ -60,32 +59,40 @@ const ShopProfileData = ({ isOwner }) => {
 
   const [currentProducts, setCurrentProducts] = useState(products);
 
-const [selectedTab, setSelectedTab] = useState("profile");
+  const [selectedTab, setSelectedTab] = useState("profile");
 
-const addToCartHandler = (id, data) => {
-  const isItemExists = cart && cart.find((i) => i._id === id);
-  if (isItemExists) {
-    toast.error("Item already in cart!");
-  } else {
-    if (data.stock < 1) {
-      toast.error("Product stock limited!");
+  const addToCartHandler = (id, data) => {
+    const isItemExists = cart && cart.find((i) => i._id === id);
+    if (isItemExists) {
+      toast.error("Item already in cart!");
     } else {
-      const cartData = { ...data, qty: 1 };
-      dispatch(addTocart(cartData));
-      toast.success("Item added to cart successfully!");
+      if (data.stock < 1) {
+        toast.error("Product stock limited!");
+      } else {
+        const cartData = { ...data, qty: 1 };
+        dispatch(addTocart(cartData));
+        toast.success("Item added to cart successfully!");
+      }
     }
-  }
   };
+
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     const filterProducts = products.filter(item => item.category == category)
     setCurrentProducts(filterProducts)
   };
-  
-const handleTabClick = (tab) => {
-  setSelectedTab(tab);
-  setCurrentProducts(products)
-};
+
+  const handleTabClick = (tab) => {
+    setSelectedTab(tab);
+    setCurrentProducts(products);
+    console.log(products)
+  };
+
+  const searchProduct = (keyword) => {
+    const result = products.filter((item) => item.name.toLowerCase().includes(keyword.toLowerCase()));
+    console.log(result)
+    if (keyword.length === 0) { setSearchResult([]) } else setSearchResult(result);
+  }
 
   return (
     <div className="w-full">
@@ -169,7 +176,7 @@ const handleTabClick = (tab) => {
           </div>
         </div>
       </div>
-      <nav className="bg-gray-800">
+      <nav className="bg-gray-800 top-0 left-0 sticky">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -204,7 +211,7 @@ const handleTabClick = (tab) => {
                   </div>
                 </div>
               </div>
-              <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end flex-end">
+              <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end flex-end relative">
                 <div class="max-w-lg lg:max-w-xs w-60">
                   <label for="search" class="sr-only">
                     Search{" "}
@@ -233,8 +240,21 @@ const handleTabClick = (tab) => {
                       id="s"
                       className="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 placeholder-gray-400 focus:outline-none bg-white sm:text-sm transition duration-150 ease-in-out"
                       placeholder="Tìm kiếm sản phẩm"
+                      onChange={(e) => searchProduct(e.target.value)}
                     />
                   </form>
+                  {searchResult.length !== 0 && (
+                    <div className=" bg-white absolute mt-1 w-60 rounded-md py-2">
+                      {searchResult.map((item) => (
+                        <Link
+                          to={`/product/${item._id}`}
+                          className=" p-2 cursor-pointer hover:bg-gray-300 rounded-sm overflow-hidden text-ellipsis whitespace-nowrap w-60 block"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

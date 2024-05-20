@@ -22,6 +22,7 @@ const BestSellingPage = () => {
     const allsellersData = sellers ? [...sellers] : [];
     setData(allsellersData);
     console.log(allsellersData);
+
   }, [sellers]);
   const getNumsProduct = (id) => {
     const data = allProducts;
