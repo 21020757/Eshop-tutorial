@@ -270,12 +270,12 @@ const ProductsPage = () => {
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[25px] mb-12 w-4/5">
               {data &&
                 data.map((i, index) => <ProductCard data={i} key={index} />)}
+              {data && data.length === 0 ? (
+                <h1 className="text-center pb-[100px] text-[20px]">
+                  No products Found!
+                </h1>
+              ) : null}
             </div>
-            {data && data.length === 0 ? (
-              <h1 className="text-center w-full pb-[100px] text-[20px]">
-                No products Found!
-              </h1>
-            ) : null}
           </div>
           <Footer />
         </div>
