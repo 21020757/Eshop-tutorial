@@ -18,9 +18,12 @@ import {
   AiOutlineHeart,
   AiOutlineShoppingCart,
   AiOutlineQuestionCircle,
+  AiOutlineCloseCircle
+  
 } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { addTocart } from "../../redux/actions/cart";
+
 
 const ShopProfileData = ({ isOwner }) => {
   const [data, setData] = useState({});
@@ -35,7 +38,7 @@ const ShopProfileData = ({ isOwner }) => {
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const { cart } = useSelector((state) => state.cart);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [searchResult, setSearchResult] = useState([])
 
   useEffect(() => {
@@ -44,6 +47,15 @@ const ShopProfileData = ({ isOwner }) => {
   }, [dispatch]);
 
   useEffect(() => {
+    const filterProducts =
+      selectedCategory.length !== 0
+        ? products.filter((item) => selectedCategory.includes(item.category))
+        : products;
+    setCurrentProducts(filterProducts);
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
     setIsLoading(true);
     axios
       .get(`${server}/shop/get-shop-info/${id}`)
@@ -56,6 +68,7 @@ const ShopProfileData = ({ isOwner }) => {
         setIsLoading(false);
       });
   }, []);
+  
 
   const [currentProducts, setCurrentProducts] = useState(products);
 
@@ -77,9 +90,19 @@ const ShopProfileData = ({ isOwner }) => {
   };
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    const filterProducts = products.filter(item => item.category == category)
-    setCurrentProducts(filterProducts)
+    const newFilter = [...selectedCategory, category]
+    setSelectedCategory(newFilter);
+    
+  };
+
+  const removeAllCategory = () => {
+    setSelectedCategory([])
+  }
+
+  const cancelCategory = (category) => {
+    const newFilter = [...selectedCategory];
+    newFilter.splice(newFilter.findIndex(value => value === category), 1)
+    setSelectedCategory(newFilter);
   };
 
   const handleTabClick = (tab) => {
@@ -211,7 +234,7 @@ const ShopProfileData = ({ isOwner }) => {
                   </div>
                 </div>
               </div>
-              <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end flex-end relative">
+              <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end relative">
                 <div class="max-w-lg lg:max-w-xs w-60">
                   <label for="search" class="sr-only">
                     Search{" "}
@@ -357,139 +380,230 @@ const ShopProfileData = ({ isOwner }) => {
         </section>
       ) : (
         <section className="container mx-auto">
-          <div class="container px-6 py-8 mx-auto">
-            <div class="lg:flex lg:-mx-2">
-              <div class="space-y-3 lg:w-1/5 lg:px-2 lg:space-y-4">
+          <div className="container px-6 py-8 mx-auto">
+            <div className="lg:flex lg:-mx-2">
+              <div className="space-y-3 lg:w-1/5 lg:px-4 lg:space-y-4 border-2 py-4 mr-4 rounded-lg bg-white shadow-xl">
+                <div className="flex justify-between">
+                  <span className="font-bold text-gray-500">Lọc sản phẩm</span>
+                  {selectedCategory.length!==0&&<AiOutlineCloseCircle className="text-xl cursor-pointer" onClick={removeAllCategory} />}
+                </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Computers and Laptops"
+                    selectedCategory.includes("Computers and Laptops")
                       ? "text-blue-600"
                       : "text-gray-500"
-                  } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Computers and Laptops")}
+                  } dark:text-gray-300 cursor-pointer flex items-center`}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Computers and Laptops")}
+                    onChange={() =>
+                      !selectedCategory.includes("Computers and Laptops")
+                        ? handleCategoryClick("Computers and Laptops")
+                        : cancelCategory("Computers and Laptops")
+                    }
+                  />
                   Computers and Laptops
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "cosmetics and body care"
+                    selectedCategory.includes("cosmetics and body care")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("cosmetics and body care")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes(
+                      "cosmetics and body care"
+                    )}
+                    onChange={() =>
+                      !selectedCategory.includes("cosmetics and body care")
+                        ? handleCategoryClick("cosmetics and body care")
+                        : cancelCategory("cosmetics and body care")
+                    }
+                  />
                   cosmetics and body care
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Accesories"
+                    selectedCategory.includes("Accesories")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Accesories")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Accesories")}
+                    onChange={() =>
+                      !selectedCategory.includes("Accesories")
+                        ? handleCategoryClick("Accesories")
+                        : cancelCategory("Accesories")
+                    }
+                  />
                   Accesories
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Cloths"
+                    selectedCategory.includes("Cloths")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Cloths")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Cloths")}
+                    onChange={() =>
+                      !selectedCategory.includes("Cloths")
+                        ? handleCategoryClick("Cloths")
+                        : cancelCategory("Cloths")
+                    }
+                  />
                   Cloths
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Shoes"
+                    selectedCategory.includes("Shoes")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Shoes")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Shoes")}
+                    onChange={() =>
+                      !selectedCategory.includes("Shoes")
+                        ? handleCategoryClick("Shoes")
+                        : cancelCategory("Shoes")
+                    }
+                  />
                   Shoes
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Gifts"
+                    selectedCategory.includes("Gifts")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Gifts")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Gifts")}
+                    onChange={() =>
+                      !selectedCategory.includes("Gifts")
+                        ? handleCategoryClick("Gifts")
+                        : cancelCategory("Gifts")
+                    }
+                  />
                   Gifts
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Pet Care"
+                    selectedCategory.includes("Pet Care")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Pet Care")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Pet Care")}
+                    onChange={() =>
+                      !selectedCategory.includes("Pet Care")
+                        ? handleCategoryClick("Pet Care")
+                        : cancelCategory("Pet Care")
+                    }
+                  />
                   Pet Care
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Mobile and Tablets"
+                    selectedCategory.includes("Mobile and Tablets")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Mobile and Tablets")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Mobile and Tablets")}
+                    onChange={() =>
+                      !selectedCategory.includes("Mobile and Tablets")
+                        ? handleCategoryClick("Mobile and Tablets")
+                        : cancelCategory("Mobile and Tablets")
+                    }
+                  />
                   Mobile and Tablets
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Music and Gaming"
+                    selectedCategory.includes("Music and Gaming")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Music and Gaming")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Music and Gaming")}
+                    onChange={() =>
+                      !selectedCategory.includes("Music and Gaming")
+                        ? handleCategoryClick("Music and Gaming")
+                        : cancelCategory("Music and Gaming")
+                    }
+                  />
                   Music and Gaming
                 </div>
                 <div
                   className={`block font-medium ${
-                    selectedCategory === "Others"
+                    selectedCategory.includes("Others")
                       ? "text-blue-600"
                       : "text-gray-500"
                   } dark:text-gray-300 cursor-pointer`}
-                  onClick={() => handleCategoryClick("Others")}
                 >
+                  <input
+                    type="checkbox"
+                    className="mr-2 h-4 w-4 cursor-pointer"
+                    checked={selectedCategory.includes("Others")}
+                    onChange={() =>
+                      !selectedCategory.includes("Others")
+                        ? handleCategoryClick("Others")
+                        : cancelCategory("Others")
+                    }
+                  />
                   Others
                 </div>
               </div>
 
-              <div class="mt-6 lg:mt-0 lg:px-2 lg:w-4/5 ">
-                <div class="flex items-center justify-between text-sm tracking-widest uppercase ">
-                  <p class="text-gray-500 dark:text-gray-300">
+              <div className="mt-6 lg:mt-0 lg:px-2 lg:w-4/5">
+                <div className="flex items-center justify-between text-sm tracking-widest uppercase">
+                  <p className="text-gray-500 dark:text-gray-300">
                     {currentProducts.length} Sản phẩm
                   </p>
-                  <div class="flex items-center">
-                    <p class="text-gray-500 dark:text-gray-300">Sort</p>
-                    <select class="font-medium text-gray-700 bg-transparent dark:text-gray-500 focus:outline-none">
-                      <option value="#">Recommended</option>
-                      <option value="#">Size</option>
-                      <option value="#">Price</option>
-                    </select>
-                  </div>
                 </div>
 
-                <div class="grid grid-cols-1 gap-8 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {currentProducts &&
                     currentProducts.map((i, index) => (
-                      <div class="flex flex-col items-center justify-center w-full max-w-lg mx-auto rounded-xl bg-white p-3 shadow-lg hover:scale-105 duration-300 cursor-pointer">
+                      <div
+                        key={index}
+                        className="flex flex-col items-center justify-center w-full max-w-lg mx-auto rounded-xl bg-white p-3 shadow-lg hover:scale-105 duration-300 cursor-pointer"
+                      >
                         <img
-                          class="object-cover w-full rounded-md h-36 xl:h-48"
+                          className="object-cover w-full rounded-md h-36 xl:h-48"
                           src={i.images[0].url}
                           alt="T-Shirt"
                         />
-                        <h4 class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">
+                        <h4 className="mt-2 text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">
                           {i.name}
                         </h4>
-                        <p class="text-gray-500 font-semibold">
+                        <p className="text-gray-500 font-semibold">
                           {i.discountPrice.toLocaleString("vi-VN")} VNĐ
                         </p>
 
@@ -497,17 +611,17 @@ const ShopProfileData = ({ isOwner }) => {
                           onClick={() => {
                             addToCartHandler(i._id, i);
                           }}
-                          class="flex items-center justify-center w-full px-2 py-2 mt-4 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                          className="flex items-center justify-center w-full px-2 py-2 mt-4 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="w-5 h-5 mx-1"
+                            className="w-5 h-5 mx-1"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                           >
                             <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                           </svg>
-                          <span class="mx-1">Add to cart</span>
+                          <span className="mx-1">Add to cart</span>
                         </button>
                       </div>
                     ))}

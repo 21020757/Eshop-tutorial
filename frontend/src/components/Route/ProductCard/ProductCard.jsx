@@ -62,7 +62,7 @@ const ProductCard = ({ data, isEvent }) => {
 
   return (
     <>
-      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer hover:-translate-y-2 duration-150">
         <Link
           to={`${
             isEvent === true
@@ -124,20 +124,18 @@ const ProductCard = ({ data, isEvent }) => {
         </Link>
         <div className="flex justify-between items-center mt-3">
           <button
-            className="flex items-center justify-center bg-blue-500 text-white py-1 px-2 rounded-md"
-            onClick={addToCartHandler}
-            title="Thêm vào giỏ hàng"
-          >
-            <AiOutlineShoppingCart className="mr-0.5"></AiOutlineShoppingCart>
-            Mua ngay
-          </button>
-          <button
-            className="flex items-center justify-center bg-blue-500 text-white py-1 px-2 rounded-md"
+            className="flex items-center justify-center bg-white text-blue-500 border-blue-500 border-2 py-1 px-2 rounded-md w-1/2 mr-2  hover:scale-105 duration-100"
             onClick={() => setOpen(!open)}
             title="Thêm vào giỏ hàng"
           >
-            <AiOutlineEye className="mr-0.5"></AiOutlineEye>
-             Xem ngay
+            Xem ngay
+          </button>
+          <button
+            className="flex items-center justify-center  bg-blue-500 text-white py-1 px-2 rounded-md w-1/2  hover:scale-105 duration-100 "
+            onClick={addToCartHandler}
+            title="Thêm vào giỏ hàng"
+          >
+            Mua ngay
           </button>
         </div>
       </div>

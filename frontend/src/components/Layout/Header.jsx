@@ -114,11 +114,11 @@ const Header = ({ activeHeading }) => {
               onChange={(e) => {
                 handleSearchChange(e, searchType);
               }}
-              className="h-[40px] w-[80%] px-2 rounded-r-full border-l-[2px] border-[#c8c4c4]"
+              className="h-[40px] w-[80%] px-2 rounded-r-full border-l-[2px] border-[#c8c4c4] pl-4"
             />
             <AiOutlineSearch
               size={30}
-              className="right-2 cursor-pointer h-[40px]"
+              className="right-2 cursor-pointer h-[40px] mr-2"
             />
             {openResults &&
             searchType === "product" &&
