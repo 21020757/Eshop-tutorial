@@ -7,7 +7,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineStar,
 } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../../styles/styles";
 import { useDispatch, useSelector } from "react-redux";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard";
@@ -25,6 +25,7 @@ const ProductCard = ({ data, isEvent }) => {
   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -125,7 +126,11 @@ const ProductCard = ({ data, isEvent }) => {
         <div className="flex justify-between items-center mt-3">
           <button
             className="flex items-center justify-center bg-white text-blue-500 border-blue-500 border-2 py-1 px-2 rounded-md w-1/2 mr-2  hover:scale-105 duration-100"
-            onClick={() => setOpen(!open)}
+            onClick={() => {
+              isEvent === true
+                ? navigate(`/product/${data._id}?isEvent=true`)
+                : navigate(`/product/${data._id}`);
+            }}
             title="Thêm vào giỏ hàng"
           >
             Xem ngay

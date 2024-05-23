@@ -42,11 +42,13 @@ const BestSellingPage = () => {
 
     return formattedDate;
   }
+
+
   const handleMessageSubmit = async (id) => {
     if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
       const userId = user._id;
       const sellerId = id;
+      const groupTitle = sellerId + user._id;
       await axios
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,

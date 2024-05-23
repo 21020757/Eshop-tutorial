@@ -92,12 +92,12 @@ const ProductDetails = ({ data }) => {
 
   const averageRating = avg.toFixed(1);
 
-
+  
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
       const userId = user._id;
       const sellerId = data.shop._id;
+      const groupTitle = userId + sellerId;
       await axios
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
@@ -130,7 +130,10 @@ const ProductDetails = ({ data }) => {
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                <p>{data.description}</p>
+                <div className=" text-ellipsis overflow-hidden">
+                  {data.description.slice(0, 500)}
+                  {data.description.length > 500 ? "..." : ""}
+                </div>
                 <div className="pt-3">
                   <h4 className={`${styles.productDiscountPrice} text-lg`}>
                     {formatPrice(data.discountPrice)}
