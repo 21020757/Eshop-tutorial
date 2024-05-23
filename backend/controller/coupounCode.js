@@ -12,6 +12,7 @@ router.post(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
+      console.log(req.body);
       const isCoupounCodeExists = await CoupounCode.find({
         name: req.body.name,
       });
@@ -21,7 +22,7 @@ router.post(
       }
 
       const coupounCode = await CoupounCode.create(req.body);
-
+      
       res.status(201).json({
         success: true,
         coupounCode,

@@ -54,6 +54,7 @@ const ShopProfileData = ({ isOwner }) => {
     setCurrentProducts(filterProducts);
   }, [selectedCategory]);
 
+
   useEffect(() => {
     window.scrollTo(0, 0);
     setIsLoading(true);
@@ -321,23 +322,6 @@ const ShopProfileData = ({ isOwner }) => {
               <p class="text-sm text-gray-500">
                 Tham gia vào {data?.createdAt?.slice(0, 10)}
               </p>
-            </div>
-            <div class="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
-              <button class="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>Message</span>
-              </button>
             </div>
           </div>
           <div class="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">

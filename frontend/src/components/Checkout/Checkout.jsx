@@ -67,14 +67,20 @@ const Checkout = () => {
     const name = couponCode;
 
     await axios.get(`${server}/coupon/get-coupon-value/${name}`).then((res) => {
-      const shopId = res.data.couponCode?.shopId;
+      const productId = res.data.couponCode?.selectedProduct
       const couponCodeValue = res.data.couponCode?.value;
+      const min = res.data.couponCode?.minAmount;
+      console.log(productId)
       if (res.data.couponCode !== null) {
         const isCouponValid =
-          cart && cart.filter((item) => item.shopId === shopId);
-
+          cart && cart.filter((item) => item._id === productId);
+        const isQuantityValid =
+          cart && cart.filter((item) => item.qty >= min);
         if (isCouponValid.length === 0) {
-          toast.error("Coupon code is not valid for this shop");
+          toast.error("Sản phẩm không hợp lệ");
+          setCouponCode("");
+        } else if (isQuantityValid.length === 0) {
+          toast.error("Số lượng không đủ để sử dụng mã");
           setCouponCode("");
         } else {
           const eligiblePrice = isCouponValid.reduce(
@@ -88,7 +94,7 @@ const Checkout = () => {
         }
       }
       if (res.data.couponCode === null) {
-        toast.error("Coupon code doesn't exists!");
+        toast.error("Mã giảm giá không tồn tại!");
         setCouponCode("");
       }
     });
@@ -97,8 +103,8 @@ const Checkout = () => {
   const discountPercentenge = couponCodeData ? discountPrice : "";
 
   const totalPrice = couponCodeData
-    ? (subTotalPrice + shipping - discountPercentenge).toFixed(2)
-    : (subTotalPrice + shipping).toFixed(2);
+    ? (subTotalPrice + shipping - discountPercentenge).toLocaleString('vi-VN')
+    : (subTotalPrice + shipping).toLocaleString('vi-VN');
 
   console.log(discountPercentenge);
 
@@ -171,7 +177,7 @@ const ShippingInfo = ({
               type="text"
               value={user && user.name}
               required
-              className={`${styles.input} !w-[95%]`}
+              className={`${styles.input} !w-[95%] border-2 p-2 rounded-lg`}
             />
           </div>
           <div className="w-[50%]">
@@ -180,7 +186,7 @@ const ShippingInfo = ({
               type="email"
               value={user && user.email}
               required
-              className={`${styles.input}`}
+              className={`${styles.input} border-2 p-2 rounded-lg`}
             />
           </div>
         </div>
@@ -192,7 +198,7 @@ const ShippingInfo = ({
               type="number"
               required
               value={user && user.phoneNumber}
-              className={`${styles.input} !w-[95%]`}
+              className={`${styles.input} !w-[95%] border-2 p-2 rounded-lg`}
             />
           </div>
           <div className="w-[50%]">
@@ -202,7 +208,7 @@ const ShippingInfo = ({
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
               required
-              className={`${styles.input}`}
+              className={`${styles.input} border-2 p-2 rounded-lg`}
             />
           </div>
         </div>
@@ -254,7 +260,7 @@ const ShippingInfo = ({
               required
               value={address1}
               onChange={(e) => setAddress1(e.target.value)}
-              className={`${styles.input} !w-[95%]`}
+              className={`${styles.input} !w-[95%] border-2 p-2 rounded-lg`}
             />
           </div>
           <div className="w-[50%]">
@@ -264,7 +270,7 @@ const ShippingInfo = ({
               value={address2}
               onChange={(e) => setAddress2(e.target.value)}
               required
-              className={`${styles.input}`}
+              className={`${styles.input} border-2 p-2 rounded-lg`}
             />
           </div>
         </div>
@@ -315,27 +321,36 @@ const CartData = ({
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">{subTotalPrice} VNĐ</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Subtotal:</h3>
+        <h5 className="text-[18px] font-[600]">
+          {subTotalPrice.toLocaleString("vi-VN")} VNĐ
+        </h5>
       </div>
       <br />
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">shipping:</h3>
-        <h5 className="text-[18px] font-[600]">{shipping.toFixed(2)} VNĐ</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">
+          Shipping(10%):
+        </h3>
+        <h5 className="text-[18px] font-[600]">
+          {shipping.toLocaleString("vi-VN")} VNĐ
+        </h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
         <h5 className="text-[18px] font-[600]">
-          - {discountPercentenge ? "VNĐ" + discountPercentenge.toString() : null}
+          {" "}
+          {discountPercentenge ? discountPercentenge.toLocaleString('vi-VN') + " VNĐ" : null}
         </h5>
       </div>
-      <h5 className="text-[18px] font-[600] text-end pt-3">{totalPrice} VNĐ</h5>
+      <h5 className="text-[18px] font-[600] text-end pt-3">
+        {totalPrice.toString()} VNĐ
+      </h5>
       <br />
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          className={`${styles.input} h-[40px] pl-2`}
+          className={`${styles.input} h-[40px] pl-2 border-2 p-2 rounded-lg`}
           placeholder="Coupoun code"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}

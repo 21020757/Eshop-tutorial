@@ -48,7 +48,7 @@ const AllCoupons = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(typeof selectedProducts);
     await axios
       .post(
         `${server}/coupon/create-coupon-code`,
@@ -56,7 +56,7 @@ const AllCoupons = () => {
           name,
           minAmount,
           maxAmount,
-          selectedProducts,
+          selectedProduct: selectedProducts,
           value,
           shopId: seller._id,
         },
@@ -221,7 +221,7 @@ const AllCoupons = () => {
                       </option>
                       {products &&
                         products.map((i) => (
-                          <option value={i.name} key={i.name}>
+                          <option value={i._id} key={i.name}>
                             {i.name}
                           </option>
                         ))}

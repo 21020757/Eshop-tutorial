@@ -6,7 +6,7 @@ import { format } from "timeago.js";
 import { server } from "../server";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineSend } from "react-icons/ai";
 import { TfiGallery } from "react-icons/tfi";
 import styles from "../styles/styles";
 const ENDPOINT = "https://socket-ecommerce-tu68.onrender.com/";
@@ -338,29 +338,29 @@ const SellerInbox = ({
   handleImageUpload,
 }) => {
   return (
-    <div className="w-[full] min-h-full flex flex-col justify-between p-5">
+    <div className="w-[full] min-h-full flex flex-col justify-between">
       {/* message header */}
-      <div className="w-full flex p-3 items-center justify-between bg-slate-200">
-        <div className="flex">
+      <div className="w-full flex p-3 items-center justify-start shadow-md">
+        <AiOutlineArrowLeft
+          size={25}
+          className="cursor-pointer mr-6"
+          onClick={() => setOpen(false)}
+        />
+        <div className="flex ">
           <img
             src={`${userData?.avatar?.url}`}
             alt=""
-            className="w-[60px] h-[60px] rounded-full"
+            className="w-[50px] h-[50px] rounded-full"
           />
           <div className="pl-3">
             <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
-            <h1>{activeStatus ? "Active Now" : ""}</h1>
+            <h1>{activeStatus ? "Active Now" : "Offline"}</h1>
           </div>
         </div>
-        <AiOutlineArrowRight
-          size={20}
-          className="cursor-pointer"
-          onClick={() => setOpen(false)}
-        />
       </div>
 
       {/* messages */}
-      <div className="px-3 h-[75vh] py-3 overflow-y-scroll">
+      <div className="p-3 h-[80vh] overflow-y-scroll">
         {messages &&
           messages.map((item, index) => (
             <div
@@ -385,9 +385,11 @@ const SellerInbox = ({
               {item.text !== "" && (
                 <div>
                   <div
-                    className={`w-max p-2 rounded ${
-                      item.sender === sellerId ? "bg-[#000]" : "bg-[#38c776]"
-                    } text-[#fff] h-min`}
+                    className={`w-max p-2 rounded-xl ${
+                      item.sender === sellerId
+                        ? "bg-[#0084FF] text-[#FFFFFF]"
+                        : "bg-[#F0F0F0] text-[#050505]"
+                    }  h-min`}
                   >
                     <p>{item.text}</p>
                   </div>
@@ -404,7 +406,7 @@ const SellerInbox = ({
       {/* send message input */}
       <form
         aria-required={true}
-        className="p-3 relative w-full flex justify-between items-center"
+        className="p-3 relative w-11/12 flex justify-between items-center bg-white rounded-full m-auto"
         onSubmit={sendMessageHandler}
       >
         <div className="w-[30px]">
@@ -419,21 +421,18 @@ const SellerInbox = ({
             <TfiGallery className="cursor-pointer" size={20} />
           </label>
         </div>
-        <div className="w-full">
+        <div className="w-full flex justify-between ml-2">
           <input
             type="text"
             required
-            placeholder="Enter your message..."
+            placeholder="Aa"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             className={`${styles.input}`}
           />
           <input type="submit" value="Send" className="hidden" id="send" />
           <label htmlFor="send">
-            <AiOutlineSend
-              size={20}
-              className="absolute right-4 top-5 cursor-pointer"
-            />
+            <AiOutlineSend size={20} className="cursor-pointer" />
           </label>
         </div>
       </form>
