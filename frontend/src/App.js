@@ -61,7 +61,7 @@ import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { getAllSellers } from "./redux/actions/sellers.js";
-
+import NegotiatePage from "./pages/NegotiatePage.jsx";
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
 
@@ -116,6 +116,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/negotiate"
+          element={
+            <ProtectedRoute>
+              <NegotiatePage />
             </ProtectedRoute>
           }
         />
@@ -294,7 +302,7 @@ const App = () => {
             </ProtectedAdminRoute>
           }
         />
-         <Route
+        <Route
           path="/admin-products"
           element={
             <ProtectedAdminRoute>
@@ -302,7 +310,7 @@ const App = () => {
             </ProtectedAdminRoute>
           }
         />
-         <Route
+        <Route
           path="/admin-events"
           element={
             <ProtectedAdminRoute>
@@ -310,7 +318,7 @@ const App = () => {
             </ProtectedAdminRoute>
           }
         />
-         <Route
+        <Route
           path="/admin-withdraw-request"
           element={
             <ProtectedAdminRoute>

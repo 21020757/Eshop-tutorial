@@ -1,43 +1,56 @@
-import React from 'react'
-import styles from '../../styles/styles'
+import React from "react";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
+import { styled } from "@mui/material/styles";
 
-const CheckoutSteps = ({active}) => {
-    console.log(active);
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 10,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#1976d2",
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#1976d2",
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    borderColor:
+      theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
+    borderTopWidth: 3,
+    borderRadius: 1,
+  },
+}));
+const steps = [
+  "Đặt hàng",
+  "Thông tin giao hàng",
+  "Thanh toán",
+  "Thành Công",
+];
+
+const CheckoutSteps = ({ active }) => {
   return (
-    <div className='w-full flex justify-center'>
-        <div className="w-[90%] 800px:w-[50%] flex items-center flex-wrap">
-               <div className={`${styles.noramlFlex}`}>
-                <div className={`${styles.cart_button}`}>
-                       <span className={`${styles.cart_button_text}`}>1.Shipping</span>
-                </div>
-                <div className={`${
-                    active > 1 ? "w-[30px] 800px:w-[70px] h-[4px] !bg-[#f63b60]"
-                    : "w-[30px] 800px:w-[70px] h-[4px] !bg-[#FDE1E6]"
-                }`} />
-               </div>
+    <Stepper
+      activeStep={active}
+      className="w-[90%] 800px:w-[60%] mx-auto"
+      connector={<QontoConnector />}
+    >
+      {steps.map((label, index) => (
+        <Step key={label}>
+          <StepButton color="inherit">{label}</StepButton>
+        </Step>
+      ))}
+    </Stepper>
+  );
+};
 
-               <div className={`${styles.noramlFlex}`}>
-                <div className={`${active > 1 ? `${styles.cart_button}` : `${styles.cart_button} !bg-[#FDE1E6]`}`}>
-                    <span className={`${active > 1 ? `${styles.cart_button_text}` : `${styles.cart_button_text} !text-[#f63b60]`}`}>
-                        2.Payment
-                    </span>
-                </div>
-               </div>
-
-               <div className={`${styles.noramlFlex}`}>
-               <div className={`${
-                    active > 3 ? "w-[30px] 800px:w-[70px] h-[4px] !bg-[#f63b60]"
-                    : "w-[30px] 800px:w-[70px] h-[4px] !bg-[#FDE1E6]"
-                }`} />
-                <div className={`${active > 2 ? `${styles.cart_button}` : `${styles.cart_button} !bg-[#FDE1E6]`}`}>
-                    <span className={`${active > 2 ? `${styles.cart_button_text}` : `${styles.cart_button_text} !text-[#f63b60]`}`}>
-                        3.Success
-                    </span>
-                </div>
-               </div>
-        </div>
-    </div>
-  )
-}
-
-export default CheckoutSteps
+export default CheckoutSteps;

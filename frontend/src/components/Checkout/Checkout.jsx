@@ -20,10 +20,17 @@ const Checkout = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
+  const [orderData, setOrderData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    console.log(orderData);
+    setOrderData(orderData);   
   }, []);
 
   const paymentSubmit = () => {
@@ -38,18 +45,14 @@ const Checkout = () => {
         city,
       };
 
-      const orderData = {
-        cart,
-        totalPrice,
-        subTotalPrice,
-        shipping,
-        discountPrice,
+      const orderNewData = {
+        ...orderData,
         shippingAddress,
-        user,
+        
       }
 
-      // update local storage with the updated orders array
-      localStorage.setItem("latestOrder", JSON.stringify(orderData));
+      console.log(orderNewData)
+      localStorage.setItem("latestOrder", JSON.stringify(orderNewData));
       navigate("/payment");
     }
   };
@@ -110,7 +113,7 @@ const Checkout = () => {
 
   return (
     <div className="w-full flex flex-col items-center py-8">
-      <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
+      <div className="w-[90%] 1000px:w-[70%] block 800px:flex justify-center">
         <div className="w-full 800px:w-[65%]">
           <ShippingInfo
             user={user}
@@ -128,17 +131,7 @@ const Checkout = () => {
             setZipCode={setZipCode}
           />
         </div>
-        <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
-          <CartData
-            handleSubmit={handleSubmit}
-            totalPrice={totalPrice}
-            shipping={shipping}
-            subTotalPrice={subTotalPrice}
-            couponCode={couponCode}
-            setCouponCode={setCouponCode}
-            discountPercentenge={discountPercentenge}
-          />
-        </div>
+       
       </div>
       <div
         className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
@@ -309,62 +302,6 @@ const ShippingInfo = ({
   );
 };
 
-const CartData = ({
-  handleSubmit,
-  totalPrice,
-  shipping,
-  subTotalPrice,
-  couponCode,
-  setCouponCode,
-  discountPercentenge,
-}) => {
-  return (
-    <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
-      <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">Subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">
-          {subTotalPrice.toLocaleString("vi-VN")} VNĐ
-        </h5>
-      </div>
-      <br />
-      <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">
-          Shipping(10%):
-        </h3>
-        <h5 className="text-[18px] font-[600]">
-          {shipping.toLocaleString("vi-VN")} VNĐ
-        </h5>
-      </div>
-      <br />
-      <div className="flex justify-between border-b pb-3">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
-        <h5 className="text-[18px] font-[600]">
-          {" "}
-          {discountPercentenge ? discountPercentenge.toLocaleString('vi-VN') + " VNĐ" : null}
-        </h5>
-      </div>
-      <h5 className="text-[18px] font-[600] text-end pt-3">
-        {totalPrice.toString()} VNĐ
-      </h5>
-      <br />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className={`${styles.input} h-[40px] pl-2 border-2 p-2 rounded-lg`}
-          placeholder="Coupoun code"
-          value={couponCode}
-          onChange={(e) => setCouponCode(e.target.value)}
-          required
-        />
-        <input
-          className={`w-full h-[40px] border border-[#f63b60] text-center text-[#f63b60] rounded-[3px] mt-8 cursor-pointer`}
-          required
-          value="Apply code"
-          type="submit"
-        />
-      </form>
-    </div>
-  );
-};
+
 
 export default Checkout;

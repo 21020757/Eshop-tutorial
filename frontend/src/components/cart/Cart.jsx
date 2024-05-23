@@ -24,7 +24,7 @@ const Cart = ({ setOpenCart }) => {
   const quantityChangeHandler = (data) => {
     dispatch(addTocart(data));
   };
-
+  
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
       <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[25%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
@@ -74,12 +74,12 @@ const Cart = ({ setOpenCart }) => {
 
             <div className="px-5 mb-3">
               {/* checkout buttons */}
-              <Link to="/checkout">
+              <Link to="/negotiate">
                 <div
                   className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
                 >
                   <h1 className="text-[#fff] text-[18px] font-[600]">
-                    Đặt hàng ({totalPrice.toLocaleString("vi-VN") + " VNĐ" })
+                    Đặt hàng ({totalPrice.toLocaleString("vi-VN") + " VNĐ"})
                   </h1>
                 </div>
               </Link>
