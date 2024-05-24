@@ -37,6 +37,7 @@ export default function NegotiatePage() {
         await axios
             .get(`${server}/coupon/get-coupon-value/${name}`)
             .then((res) => {
+                
                 const productId = res.data.couponCode?.selectedProduct;
                 const couponCodeValue = res.data.couponCode?.value;
                 const min = res.data.couponCode?.minAmount;
@@ -45,7 +46,11 @@ export default function NegotiatePage() {
                     const isCouponValid =
                         cart && cart.filter((item) => item._id === productId);
                     const isQuantityValid =
-                        cart && cart.filter((item) => item.qty >= min);
+                      cart &&
+                      cart.filter(
+                        (item) => item.qty >= min && item._id === productId
+                      );
+                    console.log(cart[1]._id == productId && cart[1].qty >= min)
                     if (isCouponValid.length === 0) {
                         toast.error("Sản phẩm không hợp lệ");
                         setCouponCode("");
